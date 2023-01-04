@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Airport from './components/Airport';
 import io from 'socket.io-client';
+import './Airplane.css'
 
 const socket = io('http://localhost:3001');
 
