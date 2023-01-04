@@ -20,16 +20,17 @@ const io = new Server(server, {
 });
 
 const stations = [
-    { id: 1, name: 'Contact Tower', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 2, name: 'Approach', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 3, name: 'Round Out', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 4, name: 'Runway', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 5, name: 'Passengers', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 6, name: 'Luggage', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 7, name: 'Fuel', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 8, name: 'Taxiway 1', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-    { id: 9, name: 'Taxiway 2', airplane: null, isOccupied: false, positionX: null, positionY: null, timer: null },
-];
+    { id: 1, name: 'Contact Tower', airplane: null, isOccupied: false, positionX: 450, positionY: 50, timer: null },
+    { id: 2, name: 'Approach', airplane: null, isOccupied: false, positionX: 450, positionY: 150, timer: null },
+    { id: 3, name: 'Round Out', airplane: null, isOccupied: false, positionX: 450, positionY: 250, timer: null },
+    { id: 4, name: 'Runway', airplane: null, isOccupied: false, positionX: 450, positionY: 350, timer: null },
+    { id: 5, name: 'Passengers', airplane: null, isOccupied: false, positionX: 450, positionY: 450, timer: null },
+    { id: 6, name: 'Luggage', airplane: null, isOccupied: false, positionX: 450, positionY: 550, timer: null },
+    { id: 7, name: 'Fuel', airplane: null, isOccupied: false, positionX: 450, positionY: 650, timer: null },
+    { id: 8, name: 'Taxiway 1', airplane: null, isOccupied: false, positionX: 450, positionY: 750, timer: null },
+    { id: 9, name: 'Taxiway 2', airplane: null, isOccupied: false, positionX: 450, positionY: 850, timer: null },
+  ];
+  
 
 const airplanes = [
     { id: 1, name: 'Airplane 1', arriving: true, positionX: null, positionY: null, station: 0, startTime: null },
