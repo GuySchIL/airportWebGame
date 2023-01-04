@@ -97,7 +97,7 @@ function addPlane(){
         nextAirplane.startTime = time;
         stations[0].airplane = nextAirplane;
         stations[0].isOccupied = true;
-        // airplanes[airplaneIndex] = nextAirplane;
+        // airplanes[airplaneIndex] = nextAirplane; - mistake?
     
         console.log(`${nextAirplane.name} arrived to station ${stations[0].name} on ${nextAirplane.startTime}`)
     }
@@ -106,137 +106,137 @@ function addPlane(){
 
 
 //Function for handling nextstation TODO: add logic
-const nextStation = (airplane) => {
+// const nextStation = (airplane) => {
 
-    return new Promise((resolve) => {
+//     return new Promise((resolve) => {
 
-        let airplaneToMove = airplanes.find((a) => a.id === airplane.id);
-        let airplaneToMoveIndex = airplanes.findIndex((a) => a.id === airplane.id);
+//         let airplaneToMove = airplanes.find((a) => a.id === airplane.id);
+//         let airplaneToMoveIndex = airplanes.findIndex((a) => a.id === airplane.id);
     
-        console.log(`The airplane you are moving from the airplanes array is: ${airplaneToMove.id} - ${airplaneToMove.name} and it's index in the airplanes array is: ${airplaneToMoveIndex}`)
+//         console.log(`The airplane you are moving from the airplanes array is: ${airplaneToMove.id} - ${airplaneToMove.name} and it's index in the airplanes array is: ${airplaneToMoveIndex}`)
     
-        const arrivalStations = [1, 2, 3, 4, 8, 5, 6];
-        const departureStations = [7, 8, 4];
+//         const arrivalStations = [1, 2, 3, 4, 8, 5, 6];
+//         const departureStations = [7, 8, 4];
 
-        const currentStationId = airplaneToMove.station;
-        console.log(`Current Station ID: ${currentStationId}`);
+//         const currentStationId = airplaneToMove.station;
+//         console.log(`Current Station ID: ${currentStationId}`);
     
-        let nextStationId;
-        let station = stations.find((station) => station.id === currentStationId);
+//         let nextStationId;
+//         let station = stations.find((station) => station.id === currentStationId);
     
-        //find the index inside the stations array of the station where the airplane moved from.
-        let fromStation = stations.findIndex((station) => station.id === currentStationId);
-        console.log(`First from station Index (in Stations array): ${fromStation}`)
+//         //find the index inside the stations array of the station where the airplane moved from.
+//         let fromStation = stations.findIndex((station) => station.id === currentStationId);
+//         console.log(`First from station Index (in Stations array): ${fromStation}`)
     
-        let didMove = false;
+//         let didMove = false;
     
-        // If the airplane is arriving, find the next station in the arrival stations array
-        if (airplaneToMove.arriving) {
+//         // If the airplane is arriving, find the next station in the arrival stations array
+//         if (airplaneToMove.arriving) {
     
-            if (currentStationId === 4){
+//             if (currentStationId === 4){
     
-                if (stations[7].isOccupied){
+//                 if (stations[7].isOccupied){
     
-                    if (stations[8].isOccupied){
-                        console.log("Both taxiways are occupied...")
-                        return;
-                    }
+//                     if (stations[8].isOccupied){
+//                         console.log("Both taxiways are occupied...")
+//                         return;
+//                     }
     
-                    else {
-                        //call for the event to move a station.
-                        airplaneToMove.station = stations[8];
-                        didMove = true;
-                    }
-                }
-            }
+//                     else {
+//                         //call for the event to move a station.
+//                         airplaneToMove.station = stations[8];
+//                         didMove = true;
+//                     }
+//                 }
+//             }
     
-            else if (currentStationId === 6){
-                airplaneToMove.station = stations[6];
-                didMove = true;
-            }
+//             else if (currentStationId === 6){
+//                 airplaneToMove.station = stations[6];
+//                 didMove = true;
+//             }
     
-            else if (currentStationId === 8){
-                airplaneToMove.station = stations[4];
-                didMove = true;
-            }
+//             else if (currentStationId === 8){
+//                 airplaneToMove.station = stations[4];
+//                 didMove = true;
+//             }
     
-            else {
-                const currentStationIndex = arrivalStations.findIndex((station) => station === currentStationId);
-                console.log(`The current station index inside the arrival stations array is: ${currentStationIndex}`);
+//             else {
+//                 const currentStationIndex = arrivalStations.findIndex((station) => station === currentStationId);
+//                 console.log(`The current station index inside the arrival stations array is: ${currentStationIndex}`);
     
-                nextStationId = arrivalStations[currentStationIndex + 1];
-                console.log(`The next station ID is: ${nextStationId}`);
-                let movedToStation = stations.find((station) => station.id === nextStationId);
-                airplaneToMove.station = movedToStation.id;
-                console.log(`The airplane you are moving is not in stations 4, 6 or 8. It was moved to station with the ID: ${airplaneToMove.station}`)
-                didMove = true;
-            }
-        }
+//                 nextStationId = arrivalStations[currentStationIndex + 1];
+//                 console.log(`The next station ID is: ${nextStationId}`);
+//                 let movedToStation = stations.find((station) => station.id === nextStationId);
+//                 airplaneToMove.station = movedToStation.id;
+//                 console.log(`The airplane you are moving is not in stations 4, 6 or 8. It was moved to station with the ID: ${airplaneToMove.station}`)
+//                 didMove = true;
+//             }
+//         }
     
     
-          // If the airplane is departing, find the next station in the departure stations array
-        else {
+//           // If the airplane is departing, find the next station in the departure stations array
+//         else {
     
-            if (currentStationId === 7){
+//             if (currentStationId === 7){
     
-                if (stations[7].isOccupied){
+//                 if (stations[7].isOccupied){
     
-                    if (stations[8].isOccupied){
-                        console.log("Both taxiways are occupied...")
-                        return;
-                    }
+//                     if (stations[8].isOccupied){
+//                         console.log("Both taxiways are occupied...")
+//                         return;
+//                     }
     
-                    else {
-                        //call for the event to move a station.
-                        airplaneToMove.station = stations[8];
-                        didMove = true;
-                    }
-                }
-            }
+//                     else {
+//                         //call for the event to move a station.
+//                         airplaneToMove.station = stations[8];
+//                         didMove = true;
+//                     }
+//                 }
+//             }
     
-            else if (currentStationId === 8){
-                airplaneToMove.station = stations[3];
-                didMove = true;
-            }
+//             else if (currentStationId === 8){
+//                 airplaneToMove.station = stations[3];
+//                 didMove = true;
+//             }
             
     
-            else {
-                //Airplane departed
-                airplaneToMove.station = null;
-                didMove = true;
-            }
-        }
+//             else {
+//                 //Airplane departed
+//                 airplaneToMove.station = null;
+//                 didMove = true;
+//             }
+//         }
     
-        if (didMove){
+//         if (didMove){
     
-            console.log(`Index of the second From station (In the stations array): ${fromStation}`)
+//             console.log(`Index of the second From station (In the stations array): ${fromStation}`)
     
-            stations[fromStation].isOccupied = false;
-            stations[fromStation].airplane = null;
+//             stations[fromStation].isOccupied = false;
+//             stations[fromStation].airplane = null;
             
-            console.log(`Station ${stations[fromStation].name} is Occupied? ${stations[fromStation].isOccupied}, contains airplane? ${stations[fromStation].airplane}`);
+//             console.log(`Station ${stations[fromStation].name} is Occupied? ${stations[fromStation].isOccupied}, contains airplane? ${stations[fromStation].airplane}`);
     
     
-            //in the station that the airplane is now at, update isOccupied to true and airplane field.
-            console.log(`The updated station ID inside the airplane object: ${airplaneToMove.station}`)
+//             //in the station that the airplane is now at, update isOccupied to true and airplane field.
+//             console.log(`The updated station ID inside the airplane object: ${airplaneToMove.station}`)
     
-            let toStation = stations.findIndex((station) => station.id === airplaneToMove.station);
-            console.log(`Index of the station the airplane moved to in the stations array: ${toStation}`)
+//             let toStation = stations.findIndex((station) => station.id === airplaneToMove.station);
+//             console.log(`Index of the station the airplane moved to in the stations array: ${toStation}`)
     
-            stations[toStation].isOccupied = true;
-            stations[toStation].airplane = airplane;
+//             stations[toStation].isOccupied = true;
+//             stations[toStation].airplane = airplane;
     
-            console.log(`Station ${stations[toStation].name} is Occupied? ${stations[toStation].isOccupied}, contains airplane? ${stations[toStation].airplane}`);
+//             console.log(`Station ${stations[toStation].name} is Occupied? ${stations[toStation].isOccupied}, contains airplane? ${stations[toStation].airplane}`);
     
     
-            airplanes[airplaneToMoveIndex] = airplaneToMove;
+//             airplanes[airplaneToMoveIndex] = airplaneToMove;
     
-            console.log(`The airplanes array is now changed, index that was changed: ${airplaneToMoveIndex}, new properties are: ${airplanes[airplaneToMoveIndex].name} - moved to station with the ID: ${airplanes[airplaneToMoveIndex].station}`)
-        }
+//             console.log(`The airplanes array is now changed, index that was changed: ${airplaneToMoveIndex}, new properties are: ${airplanes[airplaneToMoveIndex].name} - moved to station with the ID: ${airplanes[airplaneToMoveIndex].station}`)
+//         }
 
-        resolve();
-    });
-};
+//         resolve();
+//     });
+// };
 
 function nextStationNew(airplane) {
 
