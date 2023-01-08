@@ -1,24 +1,38 @@
-import React from 'react';
-import Airplane from './Airplane';
+import React from "react";
+import Airplane from "./Airplane";
 
 const Station = (props) => {
   const { station, socket } = props;
   return (
-    <div className="station">
-      <h3>{station.name}</h3>
-      <img
-        src="https://cdn.dribbble.com/users/1025386/screenshots/4130792/media/45b835b493f5b9ff20f5eae8f1404c79.png?compress=1&resize=400x300"
-        alt="Airplane"
-        style={{ width: '50px', height: '50px' , position: 'absolute', left: `${station.positionX}px`, top: `${station.positionY}px`}}
-      />
-      {station.isOccupied ? (
-        <div>
-          <p>Occupied</p>
-          <Airplane airplane={station.airplane} socket={socket} positionX={station.positionX} positionY={station.positionY} />
-        </div>
-      ) : (
-        <p>Not occupied</p>
-      )}
+    <div>
+      <div className="station">
+        {station.airplane ? (
+          <div>
+            <Airplane
+              airplane={station.airplane}
+              socket={socket}
+              positionX={station.positionX}
+              positionY={station.positionY}
+            />
+          </div>
+        ) : (
+          <p></p>
+        )}
+        {station.airplane === null && station.isOccupied ? (
+          <img
+            src="https://media.istockphoto.com/id/1142309900/vector/simple-vector-flame-icon-in-flat-style.jpg?s=612x612&w=0&k=20&c=SjJ4hpkJhpbbmitE4iXQ4aAKLM_8qdnSNVNDZ9wjfCw="
+            alt="obstacle"
+            style={{
+              position: "absolute",
+              left: `${station.positionX}px`,
+              top: `${station.positionY}px`,
+              width: "100px",
+            }}
+          />
+        ) : (
+          <p></p>
+        )}
+      </div>
     </div>
   );
 };

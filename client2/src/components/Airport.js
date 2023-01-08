@@ -1,18 +1,31 @@
 import React from 'react';
 import Station from './Station';
+import StationDisplay from './StationDisplay';
 
 const Airport = (props) => {
   const { airport, socket } = props;
   return (
-    <div className="airport">
-      <h2>Airport</h2>
-      <ul>
+    <div >
+      <div >
         {airport.stations.map((station) => (
-          <li key={station.id}>
+          <p key={station.id}>
             <Station station={station} socket={socket} />
-          </li>
+          </p>
         ))}
-      </ul>
+      </div>
+      <div
+        className="card"
+        style={{ width: '600px', height: '600px', position: 'absolute', left: `1000px`, top: `50px`, backgroundColor: '#000000' }}
+      >
+        <div className="airport" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center' }}>
+          {airport.stations.map((station) => (
+            <p key={station.id}>
+              <StationDisplay station={station} socket={socket} />
+            </p>
+          ))}
+        </div>
+
+      </div>
     </div>
   );
 };
