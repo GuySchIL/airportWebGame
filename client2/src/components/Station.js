@@ -1,5 +1,7 @@
 import React from "react";
 import Airplane from "./Airplane";
+import Fire from '../images/Fire.png'
+
 
 const Station = (props) => {
   const { station, socket } = props;
@@ -13,6 +15,7 @@ const Station = (props) => {
               socket={socket}
               positionX={station.positionX}
               positionY={station.positionY}
+              stationId={station.id}
             />
           </div>
         ) : (
@@ -20,7 +23,7 @@ const Station = (props) => {
         )}
         {station.airplane === null && station.isOccupied ? (
           <img
-            src="https://media.istockphoto.com/id/1142309900/vector/simple-vector-flame-icon-in-flat-style.jpg?s=612x612&w=0&k=20&c=SjJ4hpkJhpbbmitE4iXQ4aAKLM_8qdnSNVNDZ9wjfCw="
+            src={Fire}
             alt="obstacle"
             style={{
               position: "absolute",

@@ -11,3 +11,14 @@
     z-index: 1;
   }
   
+
+  .emergency {
+    border: 10px solid purple;
+    border-radius: 50%;
+    animation: blink 1s linear infinite;
+  }
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }

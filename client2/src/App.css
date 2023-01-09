@@ -1,6 +1,39 @@
 .App {
   text-align: center;
 }
+
+.airport-open {
+  color: green;
+}
+
+.airport-closed {
+  color: red;
+}
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+}
+
+.status-open {
+  background-color: darkgreen;
+}
+
+.status-closed {
+  background-color: darkred;
+}
+
 .card {
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -8,6 +41,28 @@
   border-radius: 5px;
   padding: 20px;
   margin: 20px;
+}
+button {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 10px 20px;
+  background-color: #333;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+button:active {
+  background-color: #444;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .card:hover {

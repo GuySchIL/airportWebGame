@@ -33,11 +33,11 @@ const stations = [
 
 
 const airplanes = [
-    { id: 1, name: 'Airplane 1', arriving: true, positionX: null, positionY: null, station: 0, startTime: null },
-    { id: 2, name: 'Airplane 2', arriving: true, positionX: null, positionY: null, station: 0, startTime: null },
-    { id: 3, name: 'Airplane 3', arriving: true, positionX: null, positionY: null, station: 0, startTime: null },
-    { id: 4, name: 'Airplane 4', arriving: true, positionX: null, positionY: null, station: 0, startTime: null },
-    { id: 5, name: 'Airplane 5', arriving: true, positionX: null, positionY: null, station: 0, startTime: null },
+    { id: 1, name: 'Airplane 1', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+    { id: 2, name: 'Airplane 2', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+    { id: 3, name: 'Airplane 3', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: true },
+    { id: 4, name: 'Airplane 4', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+    { id: 5, name: 'Airplane 5', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
 ];
 
 const airport = {
@@ -245,30 +245,39 @@ function nextStationNew(airplane) {
         return didAirplaneMove;
     }
 }
-
+let airportInterval;
 // Function to start the 'getairplane' event
 function startGetAirplaneEvent() {
     // Set up an interval to send airplanes to clients at random intervals between 45 and 60 seconds
-    const interval = setInterval(() => {
+    airportInterval = setInterval(() => {
         console.log("Sending airport data to client");
         addPlane();
         // Emit the 'getairplane' event to all connected clients with the airport data
         io.emit('update', airport);
     }, 30000 + Math.random() * 15000); // 45 seconds + random number of seconds between 0 and 15
 }
+function stopGetAirplaneEvent() {
+    clearInterval(airportInterval);
+}
+
+
 
 function setObstacle() {
-    if (stations[3].airplane) {
+    // Generate a random number between 3 and 8
+    const randomNumber = Math.floor(Math.random() * 6) + 3;
+  
+    if (stations[randomNumber].airplane) {
       console.log("Cant put an obstacble, the runway is busy");
     } else {
-      stations[3].isOccupied = true;
+      stations[randomNumber].isOccupied = true;
       io.emit('update', airport);
       setTimeout(function() {
-        stations[3].isOccupied = false;
+        stations[randomNumber].isOccupied = false;
         io.emit('update', airport);
       }, 30000);  // 30 seconds in milliseconds
     }
   }
+  
   
 
 
@@ -296,7 +305,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on('openAirport', ()=>{
+        console.log('Airport is open');
         startGetAirplaneEvent();
+    })
+    socket.on('closeAirport',()=>{
+        console.log('Airport is closed');
+        stopGetAirplaneEvent();
     })
 
     //   socket.on('moveAirplaneClick', async airplane => {
