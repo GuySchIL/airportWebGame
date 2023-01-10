@@ -7,6 +7,8 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const { emit } = require('process');
 const { resolve } = require('path');
+const mysql = require('mysql2');
+
 
 app.use(cors());
 
@@ -18,6 +20,49 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
     },
 });
+
+//DB connection - mySQL
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '123456',
+    database: 'airport_db'
+});
+
+const connectToDb = () => {
+    connection.connect((err) => {
+        if (err) {
+            console.log('Failed to connect to the database: ', err);
+        } else {
+            console.log('Successfully connected to the database.');
+        }
+    });
+}
+
+connectToDb();
+
+// Check if the "airplanes" table already exists
+const createTableIfNotExist = () => {
+    const createTable = `CREATE TABLE IF NOT EXISTS airplanes (
+                                 id INT NOT NULL AUTO_INCREMENT,
+                                 name VARCHAR(255) NOT NULL,
+                                 arriving TINYINT NOT NULL,
+                                 positionX INT,
+                                 positionY INT,
+                                 station INT,
+                                 startTime TIMESTAMP NOT NULL,
+                                 emergency TINYINT NOT NULL,
+                                 PRIMARY KEY (id)
+                               )`;
+    connection.query(createTable, (err, result) => {
+        if (err) {
+            console.log("Error creating table: " + err);
+        } else {
+            console.log("Table created successfully");
+        }
+    });
+}
+createTableIfNotExist();
 
 const stations = [
     { id: 1, name: 'Contact Tower', airplane: null, isOccupied: false, positionX: 950, positionY: 215, timer: null },
@@ -31,21 +76,61 @@ const stations = [
     { id: 9, name: 'Taxiway 2', airplane: null, isOccupied: false, positionX: 600, positionY: 550, timer: null },
 ];
 
+const airplanes = [];
 
-const airplanes = [
-    { id: 1, name: 'Airplane 1', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
-    { id: 2, name: 'Airplane 2', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
-    { id: 3, name: 'Airplane 3', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: true },
-    { id: 4, name: 'Airplane 4', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
-    { id: 5, name: 'Airplane 5', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
-];
+connection.connect((err) => {
+    if (err) {
+      console.log(`Error connecting to MySQL: ${err.message}`);
+      return;
+    }
+    console.log('Connected to MySQL.');
+  
+    // Fetch data from the airplanes table
+    connection.query('SELECT * FROM airplanes', (err, rows) => {
+      if (err) {
+        console.log(`Error fetching data from MySQL: ${err.message}`);
+        return;
+      }
+      console.log('Fetched data from MySQL.');
+  
+      // Iterate through the result set and populate the airplanes array
+      rows.forEach((row) => {
+        airplanes.push({
+          id: row.id,
+          name: row.name,
+          arriving: row.arriving === 1,
+          positionX: row.positionX,
+          positionY: row.positionY,
+          station: row.station,
+          startTime: row.startTime,
+          emergency: row.emergency === 1
+        });
+      });
+  
+    //   console.log('Populated the airplanes array:', airplanes);
+    // console.log(`This is the airplanes array: ${airplanes}`);
+        console.log(airplanes.length);
+        airplanes.forEach((airplane) => {
+            console.log(`${airplane.id} - ${airplane.name} - ${airplane.arriving} - ${airplane.positionX} - ${airplane.positionY} - ${airplane.station} - ${airplane.startTime} - ${airplane.emergency}`);
+        })
+    });
+
+
+  });
+
+// const airplanes = [
+//     { id: 1, name: 'Airplane 1', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+//     { id: 2, name: 'Airplane 2', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+//     { id: 3, name: 'Airplane 3', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: true },
+//     { id: 4, name: 'Airplane 4', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+//     { id: 5, name: 'Airplane 5', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
+// ];
 
 const airport = {
     stations,
     airplanes
 };
 
-let airplaneIndex = 0;
 
 // Set up an interval to inject airplanes into the first station at regular intervals
 // const interval = setInterval(() => {
@@ -67,10 +152,11 @@ let airplaneIndex = 0;
 //     io.emit('update', {stations });
 // }, 60000);
 
+let airplaneIndex = 0;
 
 //Function for adding a new plane
 function addPlane() {
-
+    console.log(`We are on airplane index: ${airplaneIndex}`);
     if (stations[0].isOccupied) {
         let msg = "Station 1 is already occupied. Can't accept another traffic.";
         // io.emit('StationOccupiedAlert', message);
@@ -97,6 +183,7 @@ function addPlane() {
         nextAirplane.startTime = time;
         stations[0].airplane = nextAirplane;
         stations[0].isOccupied = true;
+        airplaneIndex++;
         // airplanes[airplaneIndex] = nextAirplane; - mistake?
 
         console.log(`${nextAirplane.name} arrived to station ${stations[0].name} on ${nextAirplane.startTime}`)
