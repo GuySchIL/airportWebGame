@@ -4,6 +4,7 @@ import StationDisplay from './StationDisplay';
 
 const Airport = (props) => {
   const { airport, socket } = props;
+
   return (
     <div >
       <div >
@@ -24,6 +25,9 @@ const Airport = (props) => {
             </p>
           ))}
         </div>
+        <h2>
+          Crashes: {airport.pottentialCrashes}
+        </h2>
 
       </div>
     </div>

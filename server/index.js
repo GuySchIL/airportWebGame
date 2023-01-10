@@ -126,9 +126,12 @@ connection.connect((err) => {
 //     { id: 5, name: 'Airplane 5', arriving: true, positionX: null, positionY: null, station: 0, startTime: null,emergency: false },
 // ];
 
+let pottentialCrashes = 0;
+
 const airport = {
     stations,
-    airplanes
+    airplanes,
+    pottentialCrashes
 };
 
 
@@ -161,6 +164,7 @@ function addPlane() {
         let msg = "Station 1 is already occupied. Can't accept another traffic.";
         // io.emit('StationOccupiedAlert', message);
         console.log(msg);
+        airport.pottentialCrashes++;
         return;
     }
 
@@ -188,6 +192,7 @@ function addPlane() {
 
         console.log(`${nextAirplane.name} arrived to station ${stations[0].name} on ${nextAirplane.startTime}`)
     }
+    console.log(`Pottential crashes so far: ${airport.pottentialCrashes}`);
 
 }
 
@@ -236,7 +241,8 @@ function nextStationNew(airplane) {
             if (stations[7].isOccupied) {
                 if (stations[8].isOccupied) {
                     //Airplane is at station id 4, and both taxiways are occupied. Alert the user!
-                    console.log(`${airplaneToMove.name} can not move to the next station.`)
+                    console.log(`${airplaneToMove.name} can not move to the next station.`);
+                    airport.pottentialCrashes++;
                     return didAirplaneMove;
                 }
                 //Airplane is at station id 4, and taxiway 1 is occupied -> moves to taxiway 2 (routeArrival2)
@@ -271,6 +277,7 @@ function nextStationNew(airplane) {
                 if (stations[8].isOccupied) {
                     //Airplane is at station id 7, and both taxiways are occupied. Alert the user!
                     console.log(`${airplaneToMove.name} can not move to the next station.`)
+                    airport.pottentialCrashes++;
                     return didAirplaneMove;
                 }
                 //Airplane is at station id 7, and taxiway 1 is occupied -> moves to taxiway 2 (routeArrival2)
@@ -307,6 +314,7 @@ function nextStationNew(airplane) {
     if (stations[toStationsIndex].isOccupied) { //Next station is occupied. Airplane did not move
         didAirplaneMove = false;
         console.log(`${stations[toStationsIndex].name} is already occupied. ${airplanes[airplaneToMoveIndex].name} did not move to it's next station.`);
+        airport.pottentialCrashes++;
         return didAirplaneMove;
     }
     else { //Next station is free, move the airplane.
@@ -331,6 +339,7 @@ function nextStationNew(airplane) {
         console.log(`${airplanes[airplaneToMoveIndex].name} has moved from ${stations[fromStationsIndex].name} to ${stations[toStationsIndex].name}`);
         return didAirplaneMove;
     }
+
 }
 let airportInterval;
 // Function to start the 'getairplane' event
@@ -426,6 +435,7 @@ io.on('connection', (socket) => {
         }
 
         console.log(`Just to check that the data was updated: Airplane name that was changed ${airport.airplanes[airplaneIndex].name}, moved to station: ${airport.airplanes[airplaneIndex].station}`)
+        console.log(`Pottential crashes so far: ${airport.pottentialCrashes}`);
 
         socket.emit('update', airport);
     });
